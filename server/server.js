@@ -1,10 +1,12 @@
 const express = require('express');
+const axios = require('axios').default;
+
 app = express();
 
 const port = 5000;
 
 app.get('/', (req, res) => {
-    res.send('testing nodemon refreshing ahahdiosjfa');
+    res.send('takumi imanaka');
 });
 
 app.listen(port, () => {
