@@ -1,9 +1,7 @@
 const express = require('express')
-const cors = require('cors')
 const axios = require('axios').default
 
 app = express()
-app.use(cors())
 const port = 5000
 
 app.get('/', (req, res) => {
