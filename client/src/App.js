@@ -3,7 +3,7 @@ import './App.css';
 
 const App = () => {
   return(
-    <div class="app">
+    <div className="app">
       <div className="typebox">
         <TextWindow></TextWindow>
       </div>
