@@ -7,7 +7,7 @@ const port = 5000
 
 app.get('/words', (req, res) => {
     console.log("request received @ /words endpoint")
-    axios.get('https://random-word-api.vercel.app/api?words=200')
+    axios.get('https://random-word-api.vercel.app/api?words=5')
     .then(response => {
         res.json(response.data)
     })
