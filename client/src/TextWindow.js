@@ -44,7 +44,7 @@ const TextWindow = () => {
             </div>
         )
     }
-    else { // if game over
+    else if (wcount >= sample.length){ // if game over
         const post_body = {
             method: 'POST',
             headers: {

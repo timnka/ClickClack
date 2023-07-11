@@ -22,7 +22,7 @@ app.get('/words', (request, response) => {
 app.post('/score', (req, res) => {
     console.log('post request received @ /score')
     let dataObj = req.body
-    //console.log(dataObj)
+    console.log(dataObj)
     // dataObj ahs properties sample, input, and count (wordcount)
     let accuracy = 0, wpm = 0, correct = 0, incorrect = 0, extra = 0
 
@@ -30,11 +30,18 @@ app.post('/score', (req, res) => {
         for (let index = 0; index < dataObj.input[word].length; index++) { // for each letter in the USER'S INPUT word
             if (dataObj.input[word][index] === dataObj.sample[word][index]) {
                 correct++
+                console.log (dataObj.input[word][index] + '==' + dataObj.sample[word][index])
+            } else {
+                incorrect++
+                console.log (dataObj.input[word][index] + '!=' + dataObj.sample[word][index])
             }
         }
+
     }
 
-    
+    accuracy = correct/(correct+incorrect)
+
+    console.log(correct + ' ' + (correct+incorrect) + ' '+ accuracy)
 
 })
 
