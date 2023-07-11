@@ -1,24 +1,29 @@
-const express = require('express');
-const axios = require('axios').default;
+const express = require('express')
+const axios = require('axios')
+const port = 5000
 
-app = express();
 
-const port = 5000;
+app = express()
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('takumi imanaka');
-});
-
+// make call to external words API to fulfill get request to the server.
 app.get('/words', (req, res) => {
-    axios.get('https://random-word-api.vercel.app/api?words=10')
+    console.log("request received @ /words endpoint")
+    axios.get('https://random-word-api.vercel.app/api?words=5')
     .then(response => {
-        res.json(response.data);
+        res.json(response.data)
     })
     .catch(error=>{
-        res.status(500).json({error:'an error occurred'});
+        res.status(500).json({error:'an error occurred'})
     })
-});
+})
+
+// 
+app.post('/score', (req,res) => {
+    console.log('post request received @ /score')
+    console.log(req)
+})
 
 app.listen(port, () => {
-    console.log('app listening on port ${port}');
+    console.log(`app listening on port ${port}`)
 })
