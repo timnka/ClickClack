@@ -21,7 +21,7 @@ const TextWindow = () => {
     // function to handle any changes to user input (any new character or backspace)
     const handleChange = (event) => {
         if (event.target.value.endsWith(' ')) {
-            setInput(prevInput => [prevInput, event.target.value.substring(0, event.target.value.length - 1)]) // append user input
+            setInput(prevInput => [...prevInput, event.target.value.substring(0, event.target.value.length - 1)]) // append user input
             setCurr('')
             setWcount(pre => pre + 1)
             console.log(input)
@@ -48,13 +48,13 @@ const TextWindow = () => {
         const post_body = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json; charset=UTF-8'
             },
-            body: {
+            body: JSON.stringify({
                 'sample': sample,
                 'input': input,
-                'words': wcount
-            }
+                'wcount': wcount
+            })
         }
         
         fetch('/score', post_body)
