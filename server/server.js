@@ -9,7 +9,7 @@ app.use(express.json())
 // make call to external words API to fulfill get request to the server.
 app.get('/words', (request, response) => {
     console.log("request received @ /words endpoint")
-    axios.get('https://random-word-api.vercel.app/api?words=5')
+    axios.get('https://random-word-api.vercel.app/api?words=50')
         .then(word_res => {
             response.json(word_res.data)
         })
@@ -19,12 +19,12 @@ app.get('/words', (request, response) => {
 })
 
 // POSt request from client for score computation
-app.post('/score', (req, res) => {
+app.post('/score', (request, response) => {
     console.log('post request received @ /score')
-    let dataObj = req.body
+    let dataObj = request.body
     console.log(dataObj)
     // dataObj ahs properties sample, input, and count (wordcount)
-    let accuracy = 0, wpm = 0, correct = 0, incorrect = 0, extra = 0
+    let accuracy = 0, wpm = 0, correct = 0, incorrect = 0
 
     for (let word= 0; word < dataObj.wcount; word++) { // for each word the user got to
         for (let index = 0; index < dataObj.input[word].length; index++) { // for each letter in the USER'S INPUT word
@@ -40,8 +40,16 @@ app.post('/score', (req, res) => {
     }
 
     accuracy = correct/(correct+incorrect)
+    wpm = dataObj.wcount * 60 / dataObj.seconds
 
-    console.log(correct + ' ' + (correct+incorrect) + ' '+ accuracy)
+    const resObj = {
+        'accuracy': accuracy,
+        'wpm': wpm,
+        'correct': correct,
+        'incorrect': incorrect
+    }
+
+    response.json(resObj)
 
 })
 

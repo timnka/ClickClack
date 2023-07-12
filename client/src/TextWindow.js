@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import Timer from './Timer'
 import './TextWindow.css'
 
 const TextWindow = () => {
-
+    const INTERVAL = 20
     const [sample, setSample] = useState([]) // array of strings. the sample text displayed
     const [input, setInput] = useState([]) // the full array of strings the user inputs
     const [curr, setCurr] = useState('') // the running string of the word the user is typing
     const [wcount, setWcount] = useState(0) // total number of words completed (raw, no errors accounted for)
+    const [firstKeyDown, setFirstKeyDown] = useState(false)
 
     // fetch words from API on render
     useEffect(() => {
@@ -16,7 +18,6 @@ const TextWindow = () => {
             .then(json => setSample(json))
             .catch(error => console.error(error))
     }, [])
-
 
     // function to handle any changes to user input (any new character or backspace)
     const handleChange = (event) => {
@@ -31,8 +32,37 @@ const TextWindow = () => {
         }
     }
 
-    // if typing
-    if (wcount < sample.length) { 
+    //timer
+    const [seconds, setSeconds] = useState(INTERVAL)
+    const [timerStarted, setTimerStarted] = useState(false)
+
+    useEffect(() => {
+        const handleKeyDown = () => {
+            if (!timerStarted) {
+                setTimerStarted(true);
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (timerStarted && seconds > 0) {
+            const timer = setInterval(() => {
+                setSeconds(prevSeconds => prevSeconds - 1);
+            }, 1000);
+
+            return () => clearInterval(timer);
+        }
+    }, [timerStarted, seconds]);
+
+
+    // if typing <p> {(firstKeyDown) === false ? 60 : <Timer></Timer> } </p>
+    if (seconds > 0 && wcount < sample.length) {
         return (
             <div className="window">
                 <p>{sample.map((word) => <span>{word} </span>)}</p>
@@ -40,11 +70,12 @@ const TextWindow = () => {
                 <input type="text" value={curr} onChange={handleChange}></input>
                 <p>Entered text: {curr}</p>
                 <p>Full input: {input} </p>
-
+                <p>Seconds: {seconds} </p>
             </div>
         )
     }
-    else if (wcount >= sample.length){ // if game over
+    // if game over
+    else {
         const post_body = {
             method: 'POST',
             headers: {
@@ -53,10 +84,11 @@ const TextWindow = () => {
             body: JSON.stringify({
                 'sample': sample,
                 'input': input,
-                'wcount': wcount
+                'wcount': wcount,
+                'seconds': INTERVAL
             })
         }
-        
+
         fetch('/score', post_body)
             .then(response => response.json())
             .then(stats => {
@@ -74,4 +106,4 @@ const TextWindow = () => {
 } // end TextWindow
 
 
-export default TextWindow;
+export default TextWindow
