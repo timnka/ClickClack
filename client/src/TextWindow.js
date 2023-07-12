@@ -9,7 +9,8 @@ const TextWindow = () => {
     const [curr, setCurr] = useState('') // the running string of the word the user is typing
     const [wcount, setWcount] = useState(0) // total number of words completed (raw, no errors accounted for)
     const [firstKeyDown, setFirstKeyDown] = useState(false)
-
+    const [results, setResults] = useState({})
+    const [isLoading, setIsLoading] = useState(true)
     // fetch words from API on render
     useEffect(() => {
         fetch('/words')
@@ -89,18 +90,29 @@ const TextWindow = () => {
             })
         }
 
+        
+        
+
         fetch('/score', post_body)
             .then(response => response.json())
             .then(stats => {
                 // Handle the response from the server
-                console.log(stats);
+                setResults(stats)
+                
+                setIsLoading(false)
             })
             .catch(error => {
                 console.error('Error:', error);
             })
+        
+        
+        return ( isLoading ? <h1>Loading...</h1> :
+            <div>
+                <h1>Results: </h1>
+                <p>wpm: {results.wpm}</p>
+                <p>acc: {results.accuracy}</p>
+            </div>
 
-        return (
-            <h1>Completed type test!</h1>
         )
     }
 } // end TextWindow
