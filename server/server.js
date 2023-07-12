@@ -39,7 +39,7 @@ app.post('/score', (request, response) => {
 
     }
 
-    accuracy = correct/(correct+incorrect)
+    accuracy = Math.round(correct/(correct+incorrect) * 100)
     wpm = dataObj.wcount * 60 / dataObj.seconds
 
     const resObj = {
