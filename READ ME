@@ -1,0 +1,5 @@
+Hello!
+ClickClack is a typing tester web app I wrote from scratch. It is built using React on the frontend and Express & Node on the backend. 
+The backend of this web application makes RESTful API calls to an external Random Word API, and delivers it to the frontend. It also writes to a MySQL backend for users to be able to retrieve their previous typing history.
+
+Here is a video demo: https://youtu.be/YcJVwWpSw1U
